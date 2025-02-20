@@ -27,7 +27,7 @@ mad <- readRDS("~/mouseAD_RNA_seurat_object.rds")
 
 # subset microglia and PVM
 Idents(mad) <- "celltype"
-mgc <- subset(mad, idents=c("Microglia", "PVM"))
+mgc <- subset(mad, idents=c("Microglia"))
 
 DefaultAssay(mgc) <- "RNA"
 mgc[["RNA"]]$data <- as(mgc[["RNA"]]$data, Class = "dgCMatrix")

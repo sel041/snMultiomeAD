@@ -61,3 +61,34 @@ mad <- ProjectData(
 # remove clusters with average RNA doublet score > 0.1
 df <- aggregate(mad@meta.data$doublet_scores_obs, list(mad@meta.data$cluster_full), FUN=mean) 
 mad <- subset(mad, idents = c("10", "13", "17", "18", "20", "21", "24", "26", "29", "30", "32", "34", "35", "36", "37", "38", "39"), invert=T)
+
+# clustering after removing high doublet score clusters
+mad <- NormalizeData(mad, normalization.method = "LogNormalize", scale.factor = 10000)
+
+mad <- FindVariableFeatures(mad, selection.method = "vst", nfeatures = 4000)
+mad <- SketchData(
+  object = mad,
+  ncells = 50000, 
+  method = "LeverageScore",
+  sketched.assay = "sketch"
+)
+
+mad <- FindVariableFeatures(mad)
+all.genes <- rownames(mad)
+mad <- ScaleData(mad, features = all.genes)
+
+mad <- RunPCA(mad)
+mad <- FindNeighbors(mad, dims = 1:15)
+mad <- FindClusters(mad, resolution = 0.05) 
+mad <- RunUMAP(mad, dims = 1:15, return.model = T)
+
+mad <- ProjectData(
+  object = mad,
+  assay = "RNA",
+  full.reduction = "pca.full",
+  sketched.assay = "sketch",
+  sketched.reduction = "pca",
+  umap.model = "umap",
+  dims = 1:15,
+  refdata = list(cluster_full = "seurat_clusters")
+)

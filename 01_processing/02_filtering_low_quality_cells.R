@@ -53,6 +53,7 @@ for (i in 1:length(library)) {
   )
 }
 
+# load cell name that passed atac qc 
 
 
 

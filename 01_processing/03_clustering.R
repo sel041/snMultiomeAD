@@ -40,7 +40,7 @@ mad <- FindVariableFeatures(mad)
 all.genes <- rownames(mad)
 mad <- ScaleData(mad, features = all.genes)
 
-# dimensional reduction
+# dimensional reduction and initial clustering
 mad <- RunPCA(mad)
 mad <- FindNeighbors(mad, dims = 1:15)
 mad <- FindClusters(mad, resolution = 1)
@@ -58,10 +58,6 @@ mad <- ProjectData(
   refdata = list(cluster_full = "seurat_clusters")
 )
 
-# remove clusters 
-df$doublet_cat <- cut(df$doublet_scores_obs,
-                      breaks=c(0, 0.1, 0.2),
-                      labels=c('<0.1', '>0.1'))
-
-
-
+# remove clusters with average RNA doublet score > 0.1
+df <- aggregate(mad@meta.data$doublet_scores_obs, list(mad@meta.data$cluster_full), FUN=mean) 
+mad <- subset(mad, idents = c("10", "13", "17", "18", "20", "21", "24", "26", "29", "30", "32", "34", "35", "36", "37", "38", "39"), invert=T)

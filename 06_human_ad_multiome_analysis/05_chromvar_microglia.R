@@ -8,7 +8,7 @@ library(patchwork)
 
 setwd("~/humanAD")
 h_sig <- readRDS("~/humanAD_ATAC_signac_object.rds")
-hmgc_sig <- subset(h151, idents=c("Microgila"))
+hmgc_sig <- subset(h_sig, idents=c("Microgila"))
 
 # get .jaspar file paths
 jaspar_dir <- "~/JASPAR2024"
@@ -49,10 +49,10 @@ hmgc_sig <- RunChromVAR(
 )
 
 # subclustering based on chromvar motif activities
-DefaultAssay(mgc) <- "chromvar"
-mgc[["chromvar"]]$data <- as(mgc[["chromvar"]]$data, Class = "dgCMatrix")
-mgc <- FindVariableFeatures(mgc)
-mgc <- ScaleData(mgc)
-mgc <- RunPCA(mgc)
-mgc <- RunUMAP(mgc, dims = 1:7)
-mgc <- FindNeighbors(mgc, dims = 1:7)
+DefaultAssay(hmgc_sig) <- "chromvar"
+hmgc_sig[["chromvar"]]$data <- as(hmgc_sig[["chromvar"]]$data, Class = "dgCMatrix")
+hmgc_sig <- FindVariableFeatures(hmgc_sig)
+hmgc_sig <- ScaleData(hmgc_sig)
+hmgc_sig <- RunPCA(hmgc_sig)
+hmgc_sig <- RunUMAP(hmgc_sig, dims = 1:7)
+hmgc_sig <- FindNeighbors(hmgc_sig, dims = 1:7)

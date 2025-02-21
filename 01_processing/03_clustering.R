@@ -60,7 +60,7 @@ mad <- ProjectData(
 
 # remove clusters with average RNA doublet score > 0.1
 df <- aggregate(mad@meta.data$doublet_scores_obs, list(mad@meta.data$cluster_full), FUN=mean) 
-mad <- subset(mad, idents = c("10", "13", "17", "18", "20", "21", "24", "26", "29", "30", "32", "34", "35", "36", "37", "38", "39"), invert=T)
+mad <- subset(mad, idents = subset(df, x > 0.1)[, 1], invert=T)
 
 # clustering after removing high doublet score clusters
 mad <- NormalizeData(mad, normalization.method = "LogNormalize", scale.factor = 10000)

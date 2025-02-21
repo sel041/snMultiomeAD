@@ -17,7 +17,7 @@ metadata=pd.read_excel('~/metadata.xlsx')
 name = metadata['library_id'].tolist()
 h5ad_files=[]
 for name in name:
-    h5ad_files.append((name,'/home/sel041/ps-renlab2/mouseAD/processed_data/atac/h5_files/'+name+'.h5ad'))
+    h5ad_files.append((name,'~/h5_files/'+name+'.h5ad'))
 
 data = snap.AnnDataSet(h5ad_files, filename='mouseAD_snapatac.h5ads')
 data

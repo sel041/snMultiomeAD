@@ -47,3 +47,12 @@ hmgc_sig <- RunChromVAR(
   object = hmgc_sig,
   genome = BSgenome.Hsapiens.UCSC.hg38
 )
+
+# subclustering based on chromvar motif activities
+DefaultAssay(mgc) <- "chromvar"
+mgc[["chromvar"]]$data <- as(mgc[["chromvar"]]$data, Class = "dgCMatrix")
+mgc <- FindVariableFeatures(mgc)
+mgc <- ScaleData(mgc)
+mgc <- RunPCA(mgc)
+mgc <- RunUMAP(mgc, dims = 1:7)
+mgc <- FindNeighbors(mgc, dims = 1:7)

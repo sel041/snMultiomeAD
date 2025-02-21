@@ -21,9 +21,18 @@ library(viridis)
 
 setwd("~/mouseAD")
 # load seurat object
-metadata <- read_excel("metadata.xlsx")
-library <- metadata$library_id
-seurat_obj <- readRDS("~/mouseAD_seurat_object.rds")
+h5_files <- list.files(path = "~/outs", pattern = "\\.h5$", full.names = TRUE)
+file_names <- basename(h5_files) 
+library <- sub("\\.h5$", "", file_names)
+
+h5_read <- lapply(h5_files, Read10X_h5)
+seurat_obj <- NULL
+for (i in 1:length(h5_files)) {
+  seurat_obj[[i]] <- CreateSeuratObject(
+    counts = h5_read[[i]]$`Gene Expression`,
+    assay = "RNA"
+  )
+}
 
 # filter low quality cells based on # of RNA features
 for (i in 1:length(library)) {

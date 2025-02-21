@@ -38,7 +38,6 @@ h151 <- RunUMAP(h151, dims = 1:15)
 # remove clusters that contain mixed cell types and express marker genes from multiple cell types
 # microglia
 sub <- subset(h151, idents=c("2"))
-DefaultAssay(sub) <- "RNA"
 sub[["RNA"]]$data <- as(sub[["RNA"]]$data, Class = "dgCMatrix")
 sub <- FindVariableFeatures(sub)
 sub <- ScaleData(sub)
@@ -49,7 +48,6 @@ sub <- FindClusters(sub, resolution = 0.15)
 
 # astro
 sub <- subset(h151, idents=c(23))
-DefaultAssay(sub) <- "RNA"
 sub[["RNA"]]$data <- as(sub[["RNA"]]$data, Class = "dgCMatrix")
 sub <- FindVariableFeatures(sub)
 sub <- ScaleData(sub)
@@ -60,7 +58,6 @@ sub <- FindClusters(sub, resolution = 0.1)
 
 # oligo
 sub <- subset(h151, idents=c("0","11","25","29"))
-DefaultAssay(sub) <- "RNA"
 sub[["RNA"]]$data <- as(sub[["RNA"]]$data, Class = "dgCMatrix")
 sub <- FindVariableFeatures(sub)
 sub <- ScaleData(sub)
@@ -71,7 +68,6 @@ sub <- FindClusters(sub, resolution = 0.2)
 
 # endo
 sub <- subset(h151, idents=c("24","28"))
-DefaultAssay(sub) <- "RNA"
 sub[["RNA"]]$data <- as(sub[["RNA"]]$data, Class = "dgCMatrix")
 sub <- FindVariableFeatures(sub)
 sub <- ScaleData(sub)
@@ -82,7 +78,6 @@ sub <- FindClusters(sub, resolution = 0.1)
 
 # dg
 sub <- subset(h151, idents=c(3,4))
-DefaultAssay(sub) <- "RNA"
 sub[["RNA"]]$data <- as(sub[["RNA"]]$data, Class = "dgCMatrix")
 sub <- FindVariableFeatures(sub)
 sub <- ScaleData(sub)
@@ -93,7 +88,6 @@ sub <- FindClusters(sub, resolution = 0.1)
 
 # ca
 sub <- subset(h151, idents=c(1,7,19,27))
-DefaultAssay(sub) <- "RNA"
 sub[["RNA"]]$data <- as(sub[["RNA"]]$data, Class = "dgCMatrix")
 sub <- FindVariableFeatures(sub)
 sub <- ScaleData(sub)
@@ -104,7 +98,6 @@ sub <- FindClusters(sub, resolution = 0.1)
 
 # sub
 sub <- subset(h151, idents=c(14,22,21,5,6,12,26,17))
-DefaultAssay(sub) <- "RNA"
 sub[["RNA"]]$data <- as(sub[["RNA"]]$data, Class = "dgCMatrix")
 sub <- FindVariableFeatures(sub)
 sub <- ScaleData(sub)
@@ -115,7 +108,6 @@ sub <- FindClusters(sub, resolution = 0.1)
 
 # inhibitory neurons
 sub <- subset(h151, idents=c(9, 15, 20, 18, 8, 16, 10, 13))
-DefaultAssay(sub) <- "RNA"
 sub[["RNA"]]$data <- as(sub[["RNA"]]$data, Class = "dgCMatrix")
 sub <- FindVariableFeatures(sub)
 sub <- ScaleData(sub)

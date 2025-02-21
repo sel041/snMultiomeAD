@@ -68,7 +68,7 @@ mad <- merge(seurat_obj[[1]], y = seurat_obj[2:100],
              add.cell.ids = c(library[1:100]), project = "mouseAD")
 
 # load cell names that passed atac qc (> 1000 reads & > 5 tsse & < 1 doublet secore)
-pc <- fread("/home/sel041/ps-renlab2/mouseAD/processed_data/atac/qc/atac_qc_passed_cells.csv.gz", header = T)
+pc <- fread("~/atac_qc_passed_cells.csv.gz", header = T)
 
 # keep cells passed quality control from both RNA and ATAC
 index <- intersect(rownames(mad@meta.data) , pc$`0`)

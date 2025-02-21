@@ -84,7 +84,6 @@ for (i in 1:length(library)) {
 
 # identifying a common peak set
 combined.peaks <- UnifyPeaks(object.list = signac_obj, mode = "reduce")
-combined.peaks
 
 # create fragment objects
 frags <- NULL

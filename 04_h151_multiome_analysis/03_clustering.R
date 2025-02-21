@@ -1,4 +1,4 @@
-et.seed(1234)
+set.seed(1234)
 library(Seurat)
 library(Signac)
 library(GenomeInfoDb)

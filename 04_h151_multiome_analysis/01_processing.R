@@ -25,7 +25,7 @@ setwd("~/h151")
 # create seurat objects
 h5_files <- list.files(path = "~/outs", pattern = "\\.h5$", full.names = TRUE)
 file_names <- basename(h5_files) 
-library <- sub("_filtered_feature_bc_matrix\\.h5$", "", file_names)
+library <- sub("_\\.h5$", "", file_names)
 
 h5_read <- lapply(h5_files, Read10X_h5)
 h5_seurat <- NULL

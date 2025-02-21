@@ -23,7 +23,7 @@ library(readxl)
 setwd("~/h151")
 h151 <- readRDS("~/h151_RNA_seurat_object.rds")
 
-# clustering
+# initial clustering
 h151 <- NormalizeData(h151)
 h151 <- FindVariableFeatures(h151, selection.method = "vst", nfeatures = 4000)
 all.genes <- rownames(h151)
@@ -128,3 +128,27 @@ sub <- FindClusters(sub, resolution = 0.25)
 
 # filter the low quality cluster cells
 h151 <- subset(h151, idents="NA", invert=TRUE)
+
+# re-clustering
+h151 <- NormalizeData(h151)
+h151 <- FindVariableFeatures(h151)
+h151 <- SketchData(
+  object = h151,
+  ncells = 50000,
+  method = "LeverageScore",
+  sketched.assay = "sketch"
+)
+h151 <- FindVariableFeatures(h151)
+h151 <- ScaleData(h151)
+h151 <- RunPCA(h151)
+h151 <- RunUMAP(h151, dims = 1:15, return.model = T)
+h151 <- ProjectData(
+  object = h151,
+  assay = "RNA",
+  full.reduction = "pca.full",
+  sketched.assay = "sketch",
+  sketched.reduction = "pca",
+  umap.model = "umap",
+  dims = 1:15,
+  refdata = list(cluster_full2 = "final_cluster")
+)

@@ -18,7 +18,7 @@ library(scales)
 library(viridis)
 library(VennDiagram)
 options(Seurat.object.assay.version = "v5")
-setwd("~/ps-renlab2/mouseAD/processed_data/gex/final")
+setwd("~/mouseAD")
 
 indir <- '~/5XFAD_mouse/data/'
 outdir <- '~/mouseAD/'

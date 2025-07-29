@@ -92,3 +92,76 @@ mad <- ProjectData(
   dims = 1:15,
   refdata = list(cluster_full = "seurat_clusters")
 )
+
+mad$final_cluster = factor(mad$final_cluster ,
+                           levels=c("DG", "CA1", "CA2", "CA3", "SUB_1", "SUB_2", "SUB_3", "SUB-ProS", "Lamp5", "Pvalb", "Sst", "Vip", "Meis2", "Sncg", "Chandelier", "Cajal-Retzius", "NB", "RGL", "Astro", "OPC", "IOL", "NFOL", "MOL", "DAO", "HMG", "DAM", "IFN", "PVM", "Endo","VLMC", "SMC-Peri", "Choroid-plexus"))
+# heatmap for cell type marker genes
+library(pheatmap)
+library(viridis)
+Idents(mad) <- "final_cluster"
+cluster.averages <- AverageExpression(object = mad, assays = "RNA")
+matrix <- as.matrix(as.data.frame(cluster.averages))
+colnames(matrix) <- gsub("RNA.","",colnames(matrix))
+
+# cell type marker gene
+genes_to_use = c("Slc17a7","Neurod2", # Excitatory neurons
+                 "Prox1", "C1ql2", # DG
+                 "Lefty1", "Fibcd1", "Wfs1", "Satb2", "Gpr63", # CA1
+                 "Crabp1", "Glul", "Scgn",  # CA2
+                 "Arhgef26", "Rnf182","Nptx1", # CA2 & CA3
+                 "Iyd","Cdh24", # CA3
+                 "Tshz2",  "Slc17a6", "Fn1", # SUB  
+                 "Gad1","Gad2", # Inhibitory
+                 "Lamp5",
+                 "Pvalb",
+                 "Sst",
+                 "Vip",
+                 "Meis2",
+                 "Sncg",
+                 "Vipr2",
+                 "Reln", "Nhlh2", "Ndnf", "Trp73", "Lhx5", # CR
+                 "Calb2","Dcx", "Eomes", # NB
+                 "Sox2", "Vim", "Nes", "Pax6",  # RGL
+                 "Gfap", "Aldoc", "Dbx2", # Astro
+                 "Slc1a2",
+                 "Pdgfra","Cspg4",  # OPC
+                 "9630013A20Rik", # IOL
+                 "Mag", "Mog", "Mal", "Opalin", # Oligo
+                 "Mbp", "Plp1",
+                 "Cx3cr1", "Hexb",
+                 "Tmem119", "Siglech", "P2ry12", "Csf1r", # HMG
+                 "P2ry13", "Trem2",  # DAM
+                 "Mrc1", "F13a1", # PVM
+                 "Tek", "Pecam1", "Cldn5", "Ocln", "Flt1","Cdh5",  # Endo  
+                 "Dcn", "Lum", # VLMC
+                 "Slc22a6",
+                 "Pdgfrb", # SMC
+                 "Kcnj8", # Pericytes
+                 "Ttr") # Choroid
+
+matrix.sub <- subset(matrix, rownames(matrix) %in% genes_to_use)
+matrix.sub <- matrix.sub[order(match(rownames(matrix.sub), genes_to_use)),]
+matrix.sub <- t(matrix.sub)
+rownames(matrix.sub) <- gsub("\\.", " ",rownames(matrix.sub))
+dim(matrix.sub)
+
+a <- -1
+b <- 5
+scale <- "column"
+
+# Set larger margin on the left side to ensure all labels are visible
+pheatmap(
+  mat = matrix.sub, 
+  scale = scale, 
+  color = viridis(30), 
+  breaks = seq(a, b, by = (b - a) / 30), 
+  border_color = "black", 
+  cluster_cols = FALSE, 
+  cluster_rows = FALSE, 
+  show_colnames = TRUE, 
+  show_rownames = TRUE, 
+  angle_col = 90,  
+  fontsize = 25,  
+  main = "Gene expression of cell type marker genes",
+)
+

@@ -1,0 +1,49 @@
+library(Seurat)
+mgc <- readRDS("mouseAD_5xFAD_RNA_Microglia.rds")
+
+
+# data from https://zenodo.org/records/16938034 (Chhatbar et al. Nat Immunol (2026))
+pad <- readRDS("pad/Mouse_Myeloid_atlas_v1.RDS")
+pad
+
+# subset microglia in hippocampus only
+Idents(pad) <- "Subclass_id_label"
+pad_sub <- subset(pad, idents="001 Microglia")
+Idents(pad_sub) <- "Tissue_label"
+pad_sub <- subset(pad_sub, idents="Hippocampus")
+pad_sub
+
+Idents(pad_sub) <- "Module_id_label"
+obj <- merge(mgc, pad_sub, add.cell.ids = c("this", "chhatbar"))
+obj
+
+cell_ids <- colnames(obj)
+
+# Extract prefix before first "_"
+project <- sub("_.*", "", cell_ids)
+
+# Add as metadata
+obj$project <- project
+head(obj$project)
+
+obj[["RNA"]] <- split(obj[["RNA"]], f = obj$project)
+obj <- NormalizeData(obj)
+obj <- FindVariableFeatures(obj)
+obj <- ScaleData(obj)
+obj <- RunPCA(obj)
+obj <- RunUMAP(obj, dims = 1:10, reduction = "pca", reduction.name = "umap.unintegrated")
+
+# harmony integration
+obj <- IntegrateLayers(
+  object = obj, method = HarmonyIntegration,
+  orig.reduction = "pca", new.reduction = "harmony",
+  verbose = FALSE
+)
+obj <- RunUMAP(obj, reduction = "harmony", dims = 1:8, reduction.name = "umap.harmony")
+
+DimPlot(obj, reduction = "umap.harmony", group.by = c("project"), cols=brewer.pal(8, "Dark2"))
+DimPlot(obj_sub, reduction = "umap.harmony", group.by = c("final_cluster"), cols=c("#777ED8", "#d486d1", "#45ddce"))
+DimPlot(obj_sub, reduction = "umap.harmony", group.by = c("Module_id_label"), cols=brewer.pal(11, "Paired"))
+
+
+  

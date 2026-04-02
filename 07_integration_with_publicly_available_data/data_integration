@@ -43,7 +43,7 @@ obj <- RunUMAP(obj, reduction = "harmony", dims = 1:8, reduction.name = "umap.ha
 
 DimPlot(obj, reduction = "umap.harmony", group.by = c("project"), cols=brewer.pal(8, "Dark2"))
 DimPlot(obj_sub, reduction = "umap.harmony", group.by = c("final_cluster"), cols=c("#777ED8", "#d486d1", "#45ddce"))
-DimPlot(obj_sub, reduction = "umap.harmony", group.by = c("Module_id_label"), cols=brewer.pal(11, "Paired"))
+DimPlot(obj_sub, reduction = "umap.harmony", group.by = c("Module_label"), cols=brewer.pal(8, "Dark2"))
 
 
   
